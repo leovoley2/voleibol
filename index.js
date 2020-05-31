@@ -14,7 +14,7 @@ const router = require('./routes');
 const db = require('./config/db');
     require('./models/Usuarios');
     require('./models/categorias');
-    require('./models/Comentarios');
+    require('./models/comentarios');
     require('./models/Grupos');
     require('./models/Meeti');
     db.sync().then(() => console.log('DB Conectada')).catch((error) => console.log(error));
