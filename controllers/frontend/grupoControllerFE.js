@@ -1,5 +1,5 @@
 const Grupos = require('../../models/Grupos');
-const Meeti = require('../../models/Meeti');
+const Meeti = require('../../models/meeti');
 const moment = require('moment');
 
 exports.mostrarGrupo = async (req, res, next) => {
