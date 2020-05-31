@@ -16,7 +16,7 @@ const db = require('./config/db');
     require('./models/categorias');
     require('./models/comentarios');
     require('./models/Grupos');
-    require('./models/Meeti');
+    require('./models/meeti');
     db.sync().then(() => console.log('DB Conectada')).catch((error) => console.log(error));
 
 // Variables de Desarrollo
