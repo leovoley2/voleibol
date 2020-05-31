@@ -1,0 +1,41 @@
+<main class="asistentes ">
+    <div class="container">
+        <h1 class="my-4 titulo-web"><%= nombrePagina %>
+            <div class="informacion-usuario">
+                <div class="imagen">
+                    <% if(usuario.imagen) { %>
+                    <img src="/uploads/perfiles/<%= usuario.imagen %>">
+                    <% } %>
+                </div>
+
+                <div class="texto">
+                    <%- usuario.descripcion %>
+                </div>
+            </div>
+            <!--info-usuario-->
+            <div class="grupos-usuario">
+                <% if(grupos.length > 0 ) {  %>
+                <h2 class="titulo-web">Grupos de: <%= usuario.nombre %></h2>
+                <ul class="lista-grupos">
+                    <% grupos.forEach(grupo => { %>
+                    <li>
+                        <div class="imagen">
+                            <% if(grupo.imagen) { %>
+                            <img src="/uploads/grupos/<%= grupo.imagen %>">
+                            <% } else { %>
+                            <img src="/img/meeti.jpg">
+                            <% } %>
+                        </div>
+
+                        <div class="texto ">
+                            <a class="btn btn-rosa mt-2" href="/grupos/<%= grupo.id %>">
+                                <h3><%= grupo.nombre %></h3>
+                            </a>
+                        </div>
+                    </li>
+                    <% }) %>
+                </ul>
+                <% } %>
+            </div>
+    </div>
+</main>

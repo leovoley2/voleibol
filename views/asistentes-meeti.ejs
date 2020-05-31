@@ -1,0 +1,26 @@
+<main class="container">
+    <h1 class="my-5 titulo-web"><%= nombrePagina %></h1>
+    <div class="row ">
+        <div class="col-12 ">
+    <% if(asistentes.length > 0 ) { %>
+        <ul class="listado-asistentes">
+            <% asistentes.forEach(asistente => {  %>
+                <li>
+                    <div class="imagen">
+                        <% if(asistente.imagen) { %> 
+                            <img class="img-fluid" src="/uploads/perfiles/<%= asistente.imagen %>">
+                        <% } %>
+                    </div>
+                    <div class="texto ">
+                        <%= asistente.nombre %> <br>
+                        <p><small><%= asistente.email %></small></p>
+                    </div>
+                </li>
+            <% }) %>
+        </ul>
+    <% } else { %>
+        <p class="no-asistentes">No hay asistentes</p>
+    <% } %>
+</div>
+</div>
+</main>

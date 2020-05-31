@@ -1,0 +1,89 @@
+<section class="container-fluid slider d-flex ustify-content-between align-items-center">
+    <h1 class="animate__animated animate__bounce  ">Encuentra o crea un grupo para compartir lo que nos gusta</h1>
+    <div>
+        <a href="/crear-cuenta" class="btn btn-secondary">Obtener Cuenta</a>
+    </div>
+
+</section>
+
+<div class="row">
+    <div class="col">
+        <div class="buscador-inicio">
+            <div class="container">
+                <h2 class="titulo-web">Busca un grupo en tu ciudad</h2>
+                <form action="/busqueda" method="GET">
+                    <select name="categoria ">
+                        <option  value="" selected>-- Todas --</option>
+                        <% categorias.forEach(categoria => { %>
+                        <option value="<%= categoria.id %> "><%= categoria.nombre %> </option>
+                        <% }) %>
+                    </select>
+                    <input  type="text" name="titulo" placeholder="Titulo Meeti">
+                    <select name="pais">
+                        <option value="" selected>-- Todos --</option>
+                        <option value="MEX">México</option>
+                        <option value="COL">Colombia</option>
+                        <option value="ARG">Argentina</option>
+                        <option value="ESP">España</option>
+                        <option value="USA">Estados Unidos</option>
+                        <option value="PER">Perú</option>
+                        <option value="BAR">Brasil</option>
+                        <option value="PAR">Paraguay</option>
+                        <option value="VEN">Venezuela</option>
+                        <option value="BOL">Bolivia</option>
+                        <option value="COS">Costa Rica</option>
+                        <option value="CHI">Chile</option>
+                        <option value="URU">Uruguay</option>
+                        <option value="ECU">Ecuador</option>
+                    </select>
+                    <input type="submit" value="Buscar" class="btn btn-naranja">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <h2 class="my-4 titulo-web">Próximos Meeti's</h2>
+    <div class="grid columnas-md-3 ">
+        <% if(meetis.length > 0 ) { %>
+        <% meetis.forEach(meeti => { %>
+        <%- include('partials/card-meeti.ejs', {meeti : meeti}); %>
+        <% }) %>
+        <% } %>
+    </div>
+</div>
+
+
+<main class="bg-gris categorias">
+    <h2 class="my-4 titulo-web">Encuentra Grupos por Categoría</h2>
+    <div class="container">
+        <ul class="listado-categorias  grid columnas-2 columnas-md-3">
+            <% categorias.forEach(categoria => { %> 
+            <li>
+                <a href="/categoria/<%= categoria.slug %> ">
+                    <img class="img-fluid" src="/img/categoria_<%= categoria.id  %>.jpg">
+                    <p class="titulo2"><%= categoria.nombre %></p>
+                </a>
+            </li>
+            <% }) %> 
+        </ul>
+    </div>
+</main>
+
+<div class="meeti-bg  ">
+    <div class="container ">
+        <div class="row">
+            <div class="col_12 col-md-6 " style="color: white;">
+                <h2 class="titulo-web">Crea un grupo</h2>
+                <p class="footer2 text-center"><strong>Comparte lo que te gusta o tu pasión con los demás, crea tu propio grupo hoy mismo sin costos</strong></p>
+            </div>
+            <div class="col_12 col-md-6" style="color: white;">
+                <h2 class="titulo-web mt-4">Únete a un grupo</h2>
+                <p class="footer2 text-center"><strong>Conoce personas con tus mismos gustos y pasiones, únete a un grupo ya existente y sabras
+                    sobre próximos eventos</strong></p>
+            </div>
+        </div>
+        
+    </div>
+</div>

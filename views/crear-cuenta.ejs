@@ -1,0 +1,25 @@
+<main class=" container contenedor-formularios ">
+    <h1 class="titulo-web"><%= nombrePagina %> </h1>
+
+    <form action="/crear-cuenta" method="POST" class="default-form card">
+        <div class="campo mt-5 mx-3">
+            <label>E-mail</label>
+            <input type="email" name="email" placeholder="Tu Email">
+        </div>
+        <div class="campo mx-3">
+            <label>Nombre</label>
+            <input type="text" name="nombre" placeholder="Tu Nombre">
+        </div>
+        <div class="campo mx-3">
+            <label>Password</label>
+            <input type="password" name="password" placeholder="Tu Password">
+        </div>
+        <div class="campo mx-3">
+            <label>Repetir Password</label>
+            <input type="password" name="confirmar" placeholder="Repite tu Password">
+        </div>
+        <div class="campo enviar mx-3">
+            <input type="submit" class="btn btn-rosa" value="Crear Cuenta">
+        </div>
+    </form>
+</main>
