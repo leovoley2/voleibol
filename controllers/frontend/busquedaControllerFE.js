@@ -1,4 +1,4 @@
-const Meeti = require('../../models/meeti);
+const Meeti = require('../../models/meeti');
 const Grupos = require('../../models/Grupos');
 const Usuarios = require('../../models/Usuarios');
 
