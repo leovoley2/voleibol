@@ -27,7 +27,7 @@ exports.enviarEmail = async (opciones) => {
 
     // configurar las opciones del email
     const opcionesEmail = {
-        from : 'Meeti <noreply@meeti.com>',
+        from : 'Meeti <voleycamp@voleywebcamp.com>',
         to : opciones.usuario.email,
         subject: opciones.subject,
         html
