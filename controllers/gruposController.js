@@ -10,6 +10,12 @@ const configuracionMulter = {
     limits : { fileSize : 300000 },
     storage: fileStorage = multer.diskStorage({
         destination: (req, file, next) => {
+
+            cloudinary.config({
+            cloud_name: process.env.CLOUD_NAME,
+            api_key: process.env.API_KEY,
+            api_secret:process.env.API_SECRET
+            })
             next(null, __dirname+'/../public/uploads/grupos/');
         },
         filename : (req, file, next) => {
