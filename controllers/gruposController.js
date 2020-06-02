@@ -11,12 +11,7 @@ const configuracionMulter = {
     storage: fileStorage = multer.diskStorage({
         destination: (req, file, next) => {
 
-            cloudinary.config({
-            cloud_name: process.env.CLOUD_NAME,
-            api_key: process.env.API_KEY,
-            api_secret:process.env.API_SECRET
-            })
-            next(null, __dirname+'/../public/uploads/grupos/');
+            next(null, __dirname+'CLOUDINARY_URL=cloudinary://626868985755416:71gZSLm3lQz3L-Jf1wnG1SkfbWM@hmslt7ffb');
         },
         filename : (req, file, next) => {
             const extension = file.mimetype.split('/')[1];
