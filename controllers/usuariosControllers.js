@@ -6,7 +6,7 @@ const shortid = require('shortid');
 const fs = require('fs');
 
 const configuracionMulter = {
-    limits : { fileSize : 200000 },
+    limits : { fileSize : 400000 },
     storage: fileStorage = multer.diskStorage({
         destination: (req, file, next) => {
             next(null, __dirname+'/../public/uploads/perfiles/');
@@ -123,10 +123,10 @@ exports.confirmarCuenta = async (req, res, next) => {
     }
 
     // si existe confirmar suscripcion y redireccionar
-    usuario.activo = 1;
+    usuario.activo = 0;
     await usuario.save();
 
-    req.flash('exito', 'La cuenta se ha confirmado, ya puedes iniciar sesión');
+    req.flash('exito', 'La cuenta se ha creado, ya puedes iniciar sesión');
     res.redirect('/iniciar-sesion');
 
 }
