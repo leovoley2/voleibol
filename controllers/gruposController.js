@@ -7,7 +7,7 @@ const fs = require('fs');
 const uuid = require('uuid/v4');
 
 const configuracionMulter = {
-    limits : { fileSize : 200000 },
+    limits : { fileSize : 300000 },
     storage: fileStorage = multer.diskStorage({
         destination: (req, file, next) => {
             next(null, __dirname+'/../public/uploads/grupos/');
