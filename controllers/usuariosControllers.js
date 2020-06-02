@@ -123,7 +123,7 @@ exports.confirmarCuenta = async (req, res, next) => {
     }
 
     // si existe confirmar suscripcion y redireccionar
-    usuario.activo = 0;
+    usuario.activo = 1;
     await usuario.save();
 
     req.flash('exito', 'La cuenta se ha creado, ya puedes iniciar sesión');
