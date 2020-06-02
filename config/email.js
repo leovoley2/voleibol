@@ -1,6 +1,6 @@
 module.exports = {
-    user: 'voleywebcamp@gmail.com',
+    user: 'voleycamp@voleywebcamp.com',
     pass: 'leobardo_15',
-    host:'smtp.gmail.com',
-    port: '25'
+    host:'smtpout.secureserver.net',
+    port: '465'
 }
