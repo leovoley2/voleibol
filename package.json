@@ -4,9 +4,9 @@
   "description": "voleibol",
   "main": "index.js",
   "scripts": {
-    "desarrollo": "concurrently \"npm run dev\" \"npm run watch\" ", 
+    "desarrollo": "concurrently \"npm run dev\" \"npm run watch\" ",
     "dev": "nodemon ./index.js",
-    "start": "node ./index.js", 
+    "start": "node ./index.js",
     "watch": "webpack --w --mode development"
   },
   "author": "leobardo",
@@ -24,6 +24,7 @@
     "axios": "^0.19.2",
     "bcrypt-nodejs": "0.0.3",
     "bootstrap": "^4.5.0",
+    "cloudinary": "^1.21.0",
     "concurrently": "^5.2.0",
     "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.4",
