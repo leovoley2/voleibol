@@ -2,11 +2,12 @@ const Usuarios = require('../models/Usuarios');
 const enviarEmail = require('../handlers/email');
 
 const multer = require('multer');
+const cloudinary = require ('../handlers/cloudinary');
 const shortid = require('shortid');
 const fs = require('fs');
 
 const configuracionMulter = {
-    limits : { fileSize : 400000 },
+    limits : { fileSize : 1024 * 1024 },
     storage: fileStorage = multer.diskStorage({
         destination: (req, file, next) => {
             next(null, __dirname+'/../public/uploads/perfiles/');
@@ -50,8 +51,28 @@ exports.subirImagen = (req, res, next) => {
     })
 }
 
+// cloudinary
+app.use('/upload-images',upload.array('image'), async (req, res) =>{
 
+    const uploader = async (path) => await cloudinary.uploads(path,'Images')
 
+    if (req.method === 'POST') {
+        const urls = []
+
+        const files = req.files
+
+        for(const file of files){
+            const  {path} = file
+
+            const newPath = await uploader(path)
+
+            urls.push(newPath)
+
+            fs.unlinkSync(path)
+        }
+    }
+})
+// fin de clounary
 exports.formNuevoGrupo =  async (req, res) => {
     const categorias = await Categorias.findAll();
 
