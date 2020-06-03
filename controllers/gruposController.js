@@ -7,11 +7,11 @@ const fs = require('fs');
 const uuid = require('uuid/v4');
 
 const configuracionMulter = {
-    limits : { fileSize : 300000 },
+    limits : { fileSize : 400000 },
     storage: fileStorage = multer.diskStorage({
         destination: (req, file, next) => {
 
-            next(null, __dirname+'CLOUDINARY_URL=cloudinary://626868985755416:71gZSLm3lQz3L-Jf1wnG1SkfbWM@hmslt7ffb');
+            next(null, __dirname+'/../public/uploads/grupos/');
         },
         filename : (req, file, next) => {
             const extension = file.mimetype.split('/')[1];
