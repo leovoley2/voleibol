@@ -5,15 +5,10 @@ const multer = require('multer');
 const shortid = require('shortid');
 const fs = require('fs');
 const uuid = require('uuid/v4');
-const cloudinary = require('cloudinary');
-cloudinary.config({
-    cloud_name: process.env.CLOUD_NAME,
-    api_key: process.env.API_KEY,
-    api_secret: process.env.API_SECRET
-  });
+
 
 const configuracionMulter = {
-    limits : { fileSize : 400000 },
+    limits : { fileSize : 800000 },
     storage: fileStorage = multer.diskStorage({
         destination: (req, file, next) => {
 
@@ -38,13 +33,23 @@ const configuracionMulter = {
 const upload = multer(configuracionMulter).single('imagen');
 
 // sube imagen en el servidor
-exports.subirImagen = async (req, res, next) => {
+exports.subirImagen = (req, res, next) => {
     upload(req, res, function(error) {
-        const result = await cloudinary.v2.uploader.upload(req, file, path);
-    const foto =   new subirImagen({
-            imagen: result,url  
-        });
-    await subirImagen.save();
+        if(error) {
+            if(error instanceof multer.MulterError) {
+                if(error.code === 'LIMIT_FILE_SIZE') {
+                    req.flash('error', 'El Archivo es muy grande')
+                } else {
+                    req.flash('error', error.message);
+                }
+            } else if(error.hasOwnProperty('message')) {
+                req.flash('error', error.message);
+            }
+            res.redirect('back');
+            return;
+        } else {
+            next();
+        }
     })
 }
 
