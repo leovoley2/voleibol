@@ -12,8 +12,10 @@ const grupocontrollerFE = require('../controllers/frontend/grupoControllerFE');
 const comentariosControllerFe = require('../controllers/frontend/comentariosControllerFE');
 const busquedaControllerFE = require('../controllers/frontend/busquedaControllerFE');
 
+
 module.exports = function() {
   
+
 // AREA PUBLICA DE LA PAGINA
 
     router.get('/', homeController.home);
