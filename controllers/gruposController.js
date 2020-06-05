@@ -12,7 +12,7 @@ const configuracionMulter = {
     storage: fileStorage = multer.diskStorage({
         destination: (req, file, next) => {
 
-            next(null, __dirname+'/../public/uploads/grupos/');
+            next(null, true);
         },
         filename : (req, file, next) => {
             const extension = file.mimetype.split('/')[1];
@@ -33,8 +33,12 @@ const configuracionMulter = {
 const upload = multer(configuracionMulter).single('imagen');
 
 // sube imagen en el servidor
-exports.subirImagen = (req, res, next) => {
-    upload(req, res, function(error) {
+exports.subirImagen = async  (req, res, next) => {
+     upload(req, res, function(error) {
+        const result = await cloudinary.v2.uploader.upload(req.file.path)
+       /* const image = new image()
+        image.imagen = result.secure_url
+        await image.save()*/
         if(error) {
             if(error instanceof multer.MulterError) {
                 if(error.code === 'LIMIT_FILE_SIZE') {
