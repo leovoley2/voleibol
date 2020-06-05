@@ -1,14 +1,14 @@
 const cloudinary = require ('cloudinary');
-const dotenv = require ('dotenv');
+require('dotenv').config({path: 'variables.env'});
 
 dotenv.config()
 
 cloudinary.config({
 
-    CLOUD_NAME= 'hmslt7ffb',
-    API_KEY= '626868985755416',
-    API_SECRET= 'AzZDYJnyVXT4h96RIv_6TyVCfAg'
-    
+    cloud_name= process.env.CLOUD_NAME,
+    api_key= process.env.API_KEY,
+    api_secret= process.env.API_SECRET
+
     });
 
 exports.uploads = (File,folder) => {
