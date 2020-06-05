@@ -1,4 +1,4 @@
-import { config, uploader } from 'cloudinary';
+const cloudinary = require('cloudinary');
 
 import dotenv from 'dotenv';
 
