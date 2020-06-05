@@ -1,6 +1,6 @@
 const Categorias = require('../models/categorias');
 const Grupos = require('../models/Grupos');
-
+import { uploader, cloudinaryConfig } from './config/cloudinaryconfig'
 const multer = require('multer');
 const shortid = require('shortid');
 const fs = require('fs');
