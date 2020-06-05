@@ -2,6 +2,7 @@ const express = require('express');
 const expressLayouts = require('express-ejs-layouts');
 const path = require('path');
 const bodyParser = require('body-parser');
+import { uploader, cloudinaryConfig } from './config/cloudinaryconfig'
 const flash = require('connect-flash');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
@@ -69,6 +70,8 @@ app.use((req, res, next) => {
     res.locals.year = fecha.getFullYear();
     next();
 });
+
+
 
 // Routing
 app.use('/', router());
