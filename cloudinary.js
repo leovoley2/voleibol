@@ -1,4 +1,4 @@
-const cloudinary = require ('cloudinary');
+/*const cloudinary = require ('cloudinary');
 require('dotenv').config({path: 'variables.env'});
 
 cloudinary.config({
@@ -16,3 +16,4 @@ exports.uploads = (File,folder) => {
       fs.createReadStream(req.files.image.path, {encoding: 'binary'}).on('data', stream.write).on('end', stream.end);
     });
 }
+*/
