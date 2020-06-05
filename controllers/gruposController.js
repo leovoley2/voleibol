@@ -9,9 +9,9 @@ const uuid = require('uuid/v4');
 
 
 claudinary.config({
-    cloud_name: process.env.CLOUD_NAME,
-    api_key: process.env.API_KEY,
-    api_secret: process.env.API_SECRET
+    cloud_name: 'hmslt7ffb',
+    api_key: '626868985755416',
+    api_secret: 'AzZDYJnyVXT4h96RIv_6TyVCfAg'
 });
 
 const configuracionMulter = {
@@ -41,11 +41,14 @@ const upload = multer(configuracionMulter).single('imagen');
 
 // sube imagen en el servidor
 exports.subirImagen = async (req, res) => {
+    const image = new Image();
+    image.filename = req.file.filename;
+    image.path = '/public/uploads/grupos' + req.file.filename;
+    image.originalname = req.file.originalname;
+    image.mimetype = req.file.mimetype;
+    image.size = req.file.size;
 
- const result = await claudinary.v2.uploader.upload(req.file.path);
- /* new Photo({
-    imagen:
-  })*/
+    await image.save();
 }
 
 
