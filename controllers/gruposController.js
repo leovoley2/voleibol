@@ -69,6 +69,9 @@ exports.crearGrupo = async (req, res) => {
     req.sanitizeBody('nombre');
     req.sanitizeBody('url');
     const grupo = req.body;
+    const { id } = req.params;
+    const image = await Image.findById(id);
+    res.render('profile', { image });
 
     // almacena el usuario autenticado como el creador del grupo
     grupo.usuarioId = req.user.id;
