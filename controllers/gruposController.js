@@ -1,11 +1,18 @@
 const Categorias = require('../models/categorias');
 const Grupos = require('../models/Grupos');
+const claudinary = require('cloudinary');
 
 const multer = require('multer');
 const shortid = require('shortid');
 const fs = require('fs');
 const uuid = require('uuid/v4');
 
+
+claudinary.config({
+    cloud_name: process.env.CLOUD_NAME,
+    api_key: process.env.API_KEY,
+    api_secret: process.env.API_SECRET
+});
 
 const configuracionMulter = {
     limits : { fileSize : 800000 },
@@ -33,24 +40,12 @@ const configuracionMulter = {
 const upload = multer(configuracionMulter).single('imagen');
 
 // sube imagen en el servidor
-exports.subirImagen = (req, res, next) => {
-    upload(req, res, function(error) {
-        if(error) {
-            if(error instanceof multer.MulterError) {
-                if(error.code === 'LIMIT_FILE_SIZE') {
-                    req.flash('error', 'El Archivo es muy grande')
-                } else {
-                    req.flash('error', error.message);
-                }
-            } else if(error.hasOwnProperty('message')) {
-                req.flash('error', error.message);
-            }
-            res.redirect('back');
-            return;
-        } else {
-            next();
-        }
-    })
+exports.subirImagen = async (req, res) => {
+
+ const result = await claudinary.v2.uploader.upload(req.file.path);
+ /* new Photo({
+    imagen:
+  })*/
 }
 
 
