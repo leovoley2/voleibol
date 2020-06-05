@@ -1,21 +1,14 @@
 const Categorias = require('../models/categorias');
 const Grupos = require('../models/Grupos');
-const claudinary = require('cloudinary');
-
+const claudinary = require('./cloudinary');
 const multer = require('multer');
 const shortid = require('shortid');
 const fs = require('fs');
 const uuid = require('uuid/v4');
 
 
-claudinary.config({
-    cloud_name: 'hmslt7ffb',
-    api_key: '626868985755416',
-    api_secret: 'AzZDYJnyVXT4h96RIv_6TyVCfAg'
-});
-
 const configuracionMulter = {
-    limits : { fileSize : 800000 },
+    limits : { fileSize : 1040 * 1040 },
     storage: fileStorage = multer.diskStorage({
         destination: (req, file, next) => {
 
@@ -40,15 +33,24 @@ const configuracionMulter = {
 const upload = multer(configuracionMulter).single('imagen');
 
 // sube imagen en el servidor
-exports.subirImagen = async (req, res) => {
-    const image = new Image();
-    image.filename = req.file.filename;
-    image.path = '/public/uploads/grupos' + req.file.filename;
-    image.originalname = req.file.originalname;
-    image.mimetype = req.file.mimetype;
-    image.size = req.file.size;
-
-    await image.save();
+exports.subirImagen = (req, res, next) => {
+    upload(req, res, function(error) {
+        if(error) {
+            if(error instanceof multer.MulterError) {
+                if(error.code === 'LIMIT_FILE_SIZE') {
+                    req.flash('error', 'El Archivo es muy grande')
+                } else {
+                    req.flash('error', error.message);
+                }
+            } else if(error.hasOwnProperty('message')) {
+                req.flash('error', error.message);
+            }
+            res.redirect('back');
+            return;
+        } else {
+            next();
+        }
+    })
 }
 
 
@@ -69,9 +71,6 @@ exports.crearGrupo = async (req, res) => {
     req.sanitizeBody('nombre');
     req.sanitizeBody('url');
     const grupo = req.body;
-    const { id } = req.params;
-    const image = await Image.findById(id);
-    res.render('profile', { image });
 
     // almacena el usuario autenticado como el creador del grupo
     grupo.usuarioId = req.user.id;

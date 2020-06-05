@@ -22,7 +22,6 @@ const db = require('./config/db');
 // Variables de Desarrollo
 require('dotenv').config({path: 'variables.env'});
 
-
 // Aplicación Principal
 const app = express();
 
