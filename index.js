@@ -7,6 +7,7 @@ const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const expressValidator = require('express-validator');
 const passport = require('./config/passport');
+const claudinary = require('./cloudinary');
 const router = require('./routes');
 
 
