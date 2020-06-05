@@ -1,6 +1,6 @@
 const cloudinary = require('cloudinary');
 
-import dotenv from 'dotenv';
+require('dotenv');
 
 const cloudinaryConfig = (req, res, next) => {
 
