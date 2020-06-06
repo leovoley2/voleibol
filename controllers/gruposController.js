@@ -1,26 +1,34 @@
 const Categorias = require('../models/categorias');
 const Grupos = require('../models/Grupos');
-const config = require('../config/cloudinaryconfig');
+const cloudinary = require('cloudinary').v2;
 const multer = require('multer');
 const shortid = require('shortid');
 const fs = require('fs');
 const uuid = require('uuid/v4');
 
 
+cloudinary.config({
+    cloud_name: process.env.CLOUD_NAME,
+    api_key: process.env.API_KEY,
+    api_secret: process.env.API_SECRET,
+    });
+
 const configuracionMulter = {
-    limits : { fileSize : 1040 * 1040 },
+    limits: {
+        fileSize: 1040 * 1040
+    },
     storage: fileStorage = multer.diskStorage({
         destination: (req, file, next) => {
 
-            next(null, __dirname+'/../public/uploads/grupos/');
+            next(null, __dirname + '/../public/uploads/grupos/');
         },
-        filename : (req, file, next) => {
+        filename: (req, file, next) => {
             const extension = file.mimetype.split('/')[1];
             next(null, `${shortid.generate()}.${extension}`);
         }
-    }), 
+    }),
     fileFilter(req, file, next) {
-        if(file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+        if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
             //el formato es valido
             next(null, true);
         } else {
@@ -33,24 +41,27 @@ const configuracionMulter = {
 const upload = multer(configuracionMulter).single('imagen');
 
 // sube imagen en el servidor
-exports.subirImagen = async  (req, res, next) => {
-    const result = await cloudinary.v2.uploader.upload(req.file.path)
-    const image = new image()
-        image.imagen = result.secure_url
-        await image.save()
-  upload(req, res, function(error) {
-        if(error) {
-            if(error instanceof multer.MulterError) {
-                if(error.code === 'LIMIT_FILE_SIZE') {
-                    req.flash('error', 'El Archivo es muy grande')
-                } else {
-                    req.flash('error', error.message);
-                }
-            } else if(error.hasOwnProperty('message')) {
-                req.flash('error', error.message);
+exports.subirImagen = (req, res, next) => {
+    //const result = await cloudinary.v2.uploader.upload(req.file.path)
+    upload(req, res, function (error) {
+        if (error) {
+            if (error) {
+                return res.json({
+                    msg: "imagen no subida",
+                    error: err
+                })
             }
-            res.redirect('back');
-            return;
+            //res.json(req.file);
+            cloudinary.uploader.upload(req.file.path, (error, result) => {
+                if (error) {
+                    return res.json({
+                        msg: "imagen no ha sido subida"
+                    })
+                }
+                fs.unlinkSync(req.file.path)
+                res.json(result);
+
+            })
         } else {
             next();
         }
@@ -59,11 +70,11 @@ exports.subirImagen = async  (req, res, next) => {
 
 
 
-exports.formNuevoGrupo =  async (req, res) => {
+exports.formNuevoGrupo = async (req, res) => {
     const categorias = await Categorias.findAll();
 
     res.render('nuevo-grupo', {
-        nombrePagina : 'Crear nuevo grupo',
+        nombrePagina: 'Crear nuevo grupo',
         categorias
     })
 }
@@ -79,12 +90,12 @@ exports.crearGrupo = async (req, res) => {
     // almacena el usuario autenticado como el creador del grupo
     grupo.usuarioId = req.user.id;
 
-    if(req.file) {
+    if (req.file) {
         grupo.imagen = req.file.filename;
     }
 
     grupo.id = uuid();
-    
+
     try {
         // almacenar en la BD
         await Grupos.create(grupo);
@@ -100,14 +111,14 @@ exports.crearGrupo = async (req, res) => {
 
 exports.formEditarGrupo = async (req, res) => {
     const consultas = [];
-    consultas.push(  Grupos.findByPk(req.params.grupoId ));
+    consultas.push(Grupos.findByPk(req.params.grupoId));
     consultas.push(Categorias.findAll());
 
     // promise con await
-   const [grupo, categorias] = await Promise.all(consultas);
+    const [grupo, categorias] = await Promise.all(consultas);
 
-    res.render('editar-grupo',{
-        nombrePagina : `Editar Grupo : ${grupo.nombre}`,
+    res.render('editar-grupo', {
+        nombrePagina: `Editar Grupo : ${grupo.nombre}`,
         grupo,
         categorias
     })
@@ -115,18 +126,28 @@ exports.formEditarGrupo = async (req, res) => {
 }
 // Guardar los cambios en la base de datos
 exports.EditarGrupo = async (req, res, next) => {
-    const grupo = await Grupos.findOne({ where : { id : req.params.grupoId, usuarioId : req.user.id }});
+    const grupo = await Grupos.findOne({
+        where: {
+            id: req.params.grupoId,
+            usuarioId: req.user.id
+        }
+    });
 
     // si no existe ese grupo o no es el dueño
-    if(!grupo) {
+    if (!grupo) {
         req.flash('error', 'Operación no válida');
         res.redirect('/administracion');
         return next();
     }
 
     // todo bien, leer los valores
-    const { nombre, descripcion, categoriaId, url } = req.body;
-    
+    const {
+        nombre,
+        descripcion,
+        categoriaId,
+        url
+    } = req.body;
+
     // asignar los valores
     grupo.nombre = nombre;
     grupo.descripcion = descripcion;
@@ -142,21 +163,31 @@ exports.EditarGrupo = async (req, res, next) => {
 
 //  muestra el formulario para Editar imagen
 exports.FormEditarImagen = async (req, res) => {
-    const grupo = await Grupos.findOne({ where : { id : req.params.grupoId, usuarioId : req.user.id }});
+    const grupo = await Grupos.findOne({
+        where: {
+            id: req.params.grupoId,
+            usuarioId: req.user.id
+        }
+    });
 
-        res.render('imagen-grupo', {
-            nombrePagina : `Editar Imagen Grupo : ${grupo.nombre}`,
-            grupo
-        })
+    res.render('imagen-grupo', {
+        nombrePagina: `Editar Imagen Grupo : ${grupo.nombre}`,
+        grupo
+    })
 }
 
 // modificar la imagen de la BD y eliminar la anterior
 
 exports.editarImagen = async (req, res, next) => {
-    const grupo = await Grupos.findOne({ where : { id : req.params.grupoId, usuarioId : req.user.id }});
+    const grupo = await Grupos.findOne({
+        where: {
+            id: req.params.grupoId,
+            usuarioId: req.user.id
+        }
+    });
 
-   // el grupo existe y es valido
-    if(!grupo) {
+    // el grupo existe y es valido
+    if (!grupo) {
         req.flash('error', 'Operacion NO Valida');
         res.redirect('/iniciar-sesion');
         return next();
@@ -173,12 +204,12 @@ exports.editarImagen = async (req, res, next) => {
     }*/
 
     // si hay imagen nueva y anterior, significa que  vamos a borrar la anterior
-    if(req.file && grupo.imagen) {
+    if (req.file && grupo.imagen) {
         const imagenAnteriorPath = __dirname + `/../public/uploads/grupos/${grupo.imagen}`;
 
         // eliminar archivos con filesystem
         fs.unlink(imagenAnteriorPath, (error) => {
-            if(error) {
+            if (error) {
                 console.log(error)
             }
             return;
@@ -186,7 +217,7 @@ exports.editarImagen = async (req, res, next) => {
     }
 
     // si hay una imagen nueva, la guardamos 
-    if(req.file){
+    if (req.file) {
         grupo.imagen = req.file.filename;
     }
 
@@ -199,9 +230,14 @@ exports.editarImagen = async (req, res, next) => {
 
 // Muestra el formulario para eliminar un grupo
 exports.formEliminarGrupo = async (req, res, next) => {
-    const grupo = await Grupos.findOne({ where : { id : req.params.grupoId, usuarioId : req.user.id }});
+    const grupo = await Grupos.findOne({
+        where: {
+            id: req.params.grupoId,
+            usuarioId: req.user.id
+        }
+    });
 
-    if(!grupo) {
+    if (!grupo) {
         req.flash('error', 'Operación no válida');
         res.redirect('/administracion');
         return next();
@@ -209,27 +245,32 @@ exports.formEliminarGrupo = async (req, res, next) => {
 
     // todo bien, ejecutar la vista
     res.render('eliminar-grupo', {
-        nombrePagina : `Eliminar Grupo : ${grupo.nombre}`
+        nombrePagina: `Eliminar Grupo : ${grupo.nombre}`
     })
 }
 
 // eliminar el grupo y imagen
 exports.EliminarGrupo = async (req, res, next) => {
-    const grupo = await Grupos.findOne({ where : { id : req.params.grupoId, usuarioId : req.user.id }});
+    const grupo = await Grupos.findOne({
+        where: {
+            id: req.params.grupoId,
+            usuarioId: req.user.id
+        }
+    });
 
-     if(!grupo) {
-         req.flash('error', 'Operacion NO Valida');
-         res.redirect('/administracion');
-         return next();
-     }
+    if (!grupo) {
+        req.flash('error', 'Operacion NO Valida');
+        res.redirect('/administracion');
+        return next();
+    }
 
     // si hay una imagen, eliminarla
-    if(req.file && grupo.imagen) {
+    if (req.file && grupo.imagen) {
         const imagenAnteriorPath = __dirname + `/../public/uploads/grupos/${grupo.imagen}`;
 
         // eliminar archivos con filesystem
         fs.unlink(imagenAnteriorPath, (error) => {
-            if(error) {
+            if (error) {
                 console.log(error)
             }
             return;
@@ -238,8 +279,8 @@ exports.EliminarGrupo = async (req, res, next) => {
 
     // eliminar grupos
     await Grupos.destroy({
-        where : {
-            id : req.params.grupoId
+        where: {
+            id: req.params.grupoId
         }
     })
 
