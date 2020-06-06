@@ -20,7 +20,7 @@ const configuracionMulter = {
     storage: fileStorage = multer.diskStorage({
         destination: (req, file, next) => {
 
-            next(null, __dirname + '/../public/uploads/grupos/');
+            next(null, `${file.filename}= ${Date.now()}`);
         },
         filename: (req, file, next) => {
             const extension = file.mimetype.split('/')[1];
