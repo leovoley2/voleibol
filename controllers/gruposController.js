@@ -13,7 +13,6 @@ const configuracionMulter = {
         fileSize: 1040 * 1040
     },
     storage: fileStorage = multer.diskStorage({
-        destination: '/../public/uploads/grupos/',
         filename : (req, file, next) => {
             next(null, `${file.filename}= ${Date.now()}`);
         }
@@ -43,7 +42,7 @@ exports.subirImagen = (req, res, next) => {
                 })
             }
             res.json(req.file);
-            cloudinary.uploader.upload(req.file.path, (error, result) => {
+            cloudinary.v2.uploader.upload(req.file.path, (error, result) => {
                 if (error) {
                     return res.json({
                         msg: "imagen no ha sido subida"
