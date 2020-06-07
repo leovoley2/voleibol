@@ -33,7 +33,7 @@ const upload = multer(configuracionMulter).single('imagen');
 // sube imagen en el servidor
 exports.subirImagen = (req, res, next) => {
     //const result = await cloudinary.v2.uploader.upload(req.file.path)
-    upload(req, res, function (error) {
+    function upload(req, res, next) {
         let file = (req && req.files.file) ? req.files.file : '';
         cloudinary.uploader.upload_stream({ resource_type: 'raw' }, function (error, result) {
            if (!error && result.url) {
@@ -45,9 +45,7 @@ exports.subirImagen = (req, res, next) => {
               next();
            }
         }).end(file.data);
-
-    next()
-}
+     }
 
 
 
