@@ -13,9 +13,7 @@ const configuracionMulter = {
         fileSize: 1040 * 1040
     },
     storage: fileStorage = multer.diskStorage({
-        destination: (req, file, next) => {
-            next(null, __dirname+'/../public/uploads/perfiles/');
-        },
+        destination: '/../public/uploads/grupos/',
         filename : (req, file, next) => {
             next(null, `${file.filename}= ${Date.now()}`);
         }
