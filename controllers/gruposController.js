@@ -1,24 +1,21 @@
 const Categorias = require('../models/categorias');
 const Grupos = require('../models/Grupos');
-const cloudinary = require('cloudinary').v2;
+const cloudinary = require('../config/cloudinaryconfig');
 const multer = require('multer');
 const shortid = require('shortid');
 const fs = require('fs');
 const uuid = require('uuid/v4');
 
 
-cloudinary.config({
-    cloud_name: process.env.CLOUD_NAME,
-    api_key: process.env.API_KEY,
-    api_secret: process.env.API_SECRET,
-    });
 
 const configuracionMulter = {
     limits: {
         fileSize: 1040 * 1040
     },
     storage: fileStorage = multer.diskStorage({
-        destination: '/../public/uploads/grupos/',
+        destination: (req, file, next) => {
+            next(null, __dirname+'/../public/uploads/perfiles/');
+        },
         filename : (req, file, next) => {
             next(null, `${file.filename}= ${Date.now()}`);
         }
@@ -48,7 +45,7 @@ exports.subirImagen = (req, res, next) => {
                 })
             }
             res.json(req.file);
-            /*cloudinary.uploader.upload(req.file.path, (error, result) => {
+            cloudinary.uploader.upload(req.file.path, (error, result) => {
                 if (error) {
                     return res.json({
                         msg: "imagen no ha sido subida"
@@ -57,7 +54,7 @@ exports.subirImagen = (req, res, next) => {
                 fs.unlinkSync(req.file.path)
                 res.json(result);
 
-            })*/
+            })
         } else {
             next();
         }
