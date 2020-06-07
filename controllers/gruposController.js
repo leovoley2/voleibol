@@ -7,11 +7,11 @@ const fs = require('fs');
 const uuid = require('uuid/v4');
 
 
-/*cloudinary.config({
+cloudinary.config({
     cloud_name: process.env.CLOUD_NAME,
     api_key: process.env.API_KEY,
     api_secret: process.env.API_SECRET,
-    });*/
+    });
 
 const configuracionMulter = {
     limits: {
@@ -47,8 +47,8 @@ exports.subirImagen = (req, res, next) => {
                     error: err
                 })
             }
-            //res.json(req.file);
-            cloudinary.uploader.upload(req.file.path, (error, result) => {
+            res.json(req.file);
+            /*cloudinary.uploader.upload(req.file.path, (error, result) => {
                 if (error) {
                     return res.json({
                         msg: "imagen no ha sido subida"
@@ -57,7 +57,7 @@ exports.subirImagen = (req, res, next) => {
                 fs.unlinkSync(req.file.path)
                 res.json(result);
 
-            })
+            })*/
         } else {
             next();
         }
