@@ -34,28 +34,19 @@ const upload = multer(configuracionMulter).single('imagen');
 exports.subirImagen = (req, res, next) => {
     //const result = await cloudinary.v2.uploader.upload(req.file.path)
     upload(req, res, function (error) {
-        if (error) {
-            if (error) {
-                return res.json({
-                    msg: "imagen no subida",
-                    error: err
-                })
-            }
-            res.json(req.file);
-            cloudinary.v2.uploader.upload(req.file.path, (error, result) => {
-                if (error) {
-                    return res.json({
-                        msg: "imagen no ha sido subida"
-                    })
-                }
-                fs.unlinkSync(req.file.path)
-                res.json(result);
+        let file = (req && req.files.file) ? req.files.file : '';
+        cloudinary.uploader.upload_stream({ resource_type: 'raw' }, function (error, result) {
+           if (!error && result.url) {
+              req.body.imageURL = result.url;
+              next();
+           }
+           else {
+              req.body.imageURL = '';
+              next();
+           }
+        }).end(file.data);
 
-            })
-        } else {
-            next();
-        }
-    })
+    next()
 }
 
 
