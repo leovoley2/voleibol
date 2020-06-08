@@ -37,10 +37,9 @@ const upload = multer(configuracionMulter).single('imagen');
 
 // sube imagen en el servidor
 exports.subirImagen = async (req, file, next) => {
-
-  upload(req, file) {
-    const result = await cloudinary.v2.uploader.upload(req.file.path);  
-}
+    const result = await cloudinary.v2.uploader.upload(req.file.path);
+  
+    next()
 }
 
 exports.formNuevoGrupo = async (req, res) => {
