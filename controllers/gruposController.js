@@ -41,13 +41,12 @@ exports.subirImagen = (req, res, next) => {
               next();
            }
            else {
-              req.body.imageURL = '';
+              req.body.imagen = '';
               next();
            }
         })
      }
-
-    }
+}
 
 
 exports.formNuevoGrupo = async (req, res) => {
