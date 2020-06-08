@@ -13,8 +13,11 @@ const configuracionMulter = {
         fileSize: 1040 * 1040
     },
     storage: fileStorage = multer.diskStorage({
+        destination: function(req, file, next){
+            next(null, '../public/uploads/grupos/');
+        },
         filename : (req, file, next) => {
-            next(null, `${file.filename}= ${Date.now()}`);
+            next(null, new Date().toISOString() + file.originalname);
         }
     }),
     fileFilter(req, file, next) {
@@ -44,6 +47,7 @@ exports.subirImagen = (req, res, next) => {
               req.body.imagen = '';
               next();
            }
+           next();
         })
      }
 }
