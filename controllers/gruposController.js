@@ -37,26 +37,11 @@ const upload = multer(configuracionMulter).single('imagen');
 
 // sube imagen en el servidor
 exports.subirImagen = async (req, file, next) => {
-const result = await cloudinary.v2.uploader.upload(req.file.path);
-  upload(req, file, function(error) {
-        if(error) {
-            if(error instanceof multer.MulterError) {
-                if(error.code === 'LIMIT_FILE_SIZE') {
-                    req.flash('error', 'El Archivo es muy grande')
-                } else {
-                    req.flash('error', error.message);
-                }
-            } else if(error.hasOwnProperty('message')) {
-                req.flash('error', error.message);
-            }
-            res.redirect('back');
-            return;
-        } else {
-            next();
-        }
-    })
-}
 
+  upload(req, file) {
+    const result = await cloudinary.v2.uploader.upload(req.file.path);  
+}
+}
 
 exports.formNuevoGrupo = async (req, res) => {
     const categorias = await Categorias.findAll();
