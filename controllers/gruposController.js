@@ -37,6 +37,7 @@ const upload = multer(configuracionMulter).single('imagen');
 
 // sube imagen en el servidor
 exports.subirImagen = (req, res, next) => {
+    const result =  cloudinary.v2.uploader.upload(req.file.path);
     upload(req, res, function(error) {
         if(error) {
             if(error instanceof multer.MulterError) {
@@ -73,12 +74,13 @@ exports.crearGrupo = async (req, res) => {
     req.sanitizeBody('nombre');
     req.sanitizeBody('url');
     const grupo = req.body;
+    
 
     // almacena el usuario autenticado como el creador del grupo
     grupo.usuarioId = req.user.id;
 
     if (req.file) {
-        grupo.imagen = req.file.filename;
+        grupo.imagen = req.file.path;
     }
 
     grupo.id = uuid();
@@ -86,8 +88,6 @@ exports.crearGrupo = async (req, res) => {
     try {
         // almacenar en la BD
         await Grupos.create(grupo);
-        const result = await cloudinary.v2.uploader.upload(req.file.path);
-        await fs.unlink(req.file.path);
         req.flash('exito', 'Se ha creado el grupo correctamente');
         res.redirect('/administracion');
     } catch (error) {
