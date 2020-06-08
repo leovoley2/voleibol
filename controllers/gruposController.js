@@ -13,12 +13,14 @@ const configuracionMulter = {
         fileSize: 1040 * 1040
     },
     storage: fileStorage = multer.diskStorage({
-        destination: function(req, file, next){
-            next(null, '../public/uploads/grupos/');
+        destination: (req, file, next) => {
+            next(null, __dirname+'/../public/uploads/perfiles/');
         },
         filename : (req, file, next) => {
-            next(null, new Date().toISOString() + file.originalname);
+            const extension = file.mimetype.split('/')[1];
+            next(null, `${shortid.generate()}.${extension}`);
         }
+        
     }),
     fileFilter(req, file, next) {
         if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
@@ -34,22 +36,25 @@ const configuracionMulter = {
 const upload = multer(configuracionMulter).single('imagen');
 
 // sube imagen en el servidor
-exports.subirImagen = (req, res, next) => {
-    //const result = await cloudinary.v2.uploader.upload(req.file.path)
-    function upload(req, res, next) {
-        let file = (req && req.files.file) ? req.files.file : '';
-        cloudinary.uploader.upload_stream((req.file.path), function (error, result) {
-           if (!error && result.url) {
-              req.body.imagen = result.url;
-              next();
-           }
-           else {
-              req.body.imagen = '';
-              next();
-           }
-           next();
-        })
-     }
+exports.subirImagen = async (req, file, next) => {
+    upload(req, file, function(error) {
+     const result = await cloudinary.v2.uploader.upload(req.file.path);
+        if(error) {
+            if(error instanceof multer.MulterError) {
+                if(error.code === 'LIMIT_FILE_SIZE') {
+                    req.flash('error', 'El Archivo es muy grande')
+                } else {
+                    req.flash('error', error.message);
+                }
+            } else if(error.hasOwnProperty('message')) {
+                req.flash('error', error.message);
+            }
+            res.redirect('back');
+            return;
+        } else {
+            next();
+        }
+    })
 }
 
 
