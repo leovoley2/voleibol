@@ -35,18 +35,18 @@ exports.subirImagen = (req, res, next) => {
     //const result = await cloudinary.v2.uploader.upload(req.file.path)
     function upload(req, res, next) {
         let file = (req && req.files.file) ? req.files.file : '';
-        cloudinary.uploader.upload_stream({ resource_type: 'raw' }, function (error, result) {
+        cloudinary.uploader.upload_stream((req.file.path), function (error, result) {
            if (!error && result.url) {
-              req.body.imageURL = result.url;
+              req.body.imagen = result.url;
               next();
            }
            else {
               req.body.imageURL = '';
               next();
            }
-        }).end(file.data);
+        })
      }
-     next()
+
     }
 
 
