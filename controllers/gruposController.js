@@ -45,11 +45,9 @@ exports.subirImagen = (req, res, next) => {
         }
         fs.unlinkSync(req.file.path)
         res.json(result);
-
+        next()
     })
-} else {
-    next();
-}
+
 
 
 exports.formNuevoGrupo = async (req, res) => {
