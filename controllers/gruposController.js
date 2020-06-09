@@ -37,24 +37,18 @@ const upload = multer(configuracionMulter).single('imagen');
 
 // sube imagen en el servidor
 exports.subirImagen = (req, res, next) => {
-    const result =  cloudinary.v2.uploader.upload(req.file.path);
-    upload(req, res, function(error) {
-        if(error) {
-            if(error instanceof multer.MulterError) {
-                if(error.code === 'LIMIT_FILE_SIZE') {
-                    req.flash('error', 'El Archivo es muy grande')
-                } else {
-                    req.flash('error', error.message);
-                }
-            } else if(error.hasOwnProperty('message')) {
-                req.flash('error', error.message);
-            }
-            res.redirect('back');
-            return;
-        } else {
-            next();
+    cloudinary.uploader.upload(req.file.path, (error, result) => {
+        if (error) {
+            return res.json({
+                msg: "imagen no ha sido subida"
+            })
         }
+        fs.unlinkSync(req.file.path)
+        res.json(result);
+
     })
+} else {
+    next();
 }
 
 
@@ -80,7 +74,7 @@ exports.crearGrupo = async (req, res) => {
     grupo.usuarioId = req.user.id;
 
     if (req.file) {
-        grupo.imagen = req.file.path;
+        grupo.imagen = req.file;
     }
 
     grupo.id = uuid();
