@@ -37,15 +37,22 @@ const upload = multer(configuracionMulter).single('imagen');
 
 // sube imagen en el servidor
 exports.subirImagen = (req, res, next) => {
-    cloudinary.uploader.upload(req.file.path, (error, result) => {
-        if (error) {
-            return res.json({
-                msg: "imagen no ha sido subida"
-            })
+    upload(req, res, function(error) {
+        if(error) {
+            if(error instanceof multer.MulterError) {
+                if(error.code === 'LIMIT_FILE_SIZE') {
+                    req.flash('error', 'El Archivo es muy grande')
+                } else {
+                    req.flash('error', error.message);
+                }
+            } else if(error.hasOwnProperty('message')) {
+                req.flash('error', error.message);
+            }
+            res.redirect('back');
+            return;
+        } else {
+            next();
         }
-        fs.unlinkSync(req.file.path)
-        res.json(result);
-        next()
     })
 }
 
