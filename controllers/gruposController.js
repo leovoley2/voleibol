@@ -47,7 +47,7 @@ exports.subirImagen = (req, res, next) => {
         res.json(result);
         next()
     })
-
+}
 
 
 exports.formNuevoGrupo = async (req, res) => {
