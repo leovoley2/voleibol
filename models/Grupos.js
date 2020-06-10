@@ -31,7 +31,7 @@ const Grupos = db.define('grupos', {
     },
     url: Sequelize.TEXT, 
     imagen: Sequelize.STRING
-    public_id: Sequelize.STRING
+    
 })
 
 Grupos.belongsTo(Categorias);
