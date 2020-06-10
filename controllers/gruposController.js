@@ -7,9 +7,9 @@ const fs = require('fs');
 const uuid = require('uuid/v4');
 
 cloudinary.config({
-    CLOUD_NAME= hmslt7ffb
-    API_KEY= 626868985755416
-    API_SECRET= AzZDYJnyVXT4h96RIv_6TyVCfAg
+    CLOUD_NAME= 'hmslt7ffb',
+    API_KEY= '626868985755416',
+    API_SECRET= 'AzZDYJnyVXT4h96RIv_6TyVCfAg'
 });
 
 const configuracionMulter =  {
