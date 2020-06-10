@@ -30,7 +30,7 @@ const Grupos = db.define('grupos', {
         }
     },
     url: Sequelize.TEXT, 
-    imagen: Sequelize.STRING
+    imagen: Sequelize.TEXT
     
 })
 
