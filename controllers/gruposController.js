@@ -8,7 +8,7 @@ const uuid = require('uuid/v4');
 
 
 
-const configuracionMulter = {
+const configuracionMulter =  {
     limits: {
         fileSize: 1040 * 1040
     },
@@ -37,7 +37,9 @@ const upload = multer(configuracionMulter).single('imagen');
 
 // sube imagen en el servidor
 exports.subirImagen = (req, res, next) => {
-    upload(req, res, function(error) {
+    const file = req.file.photo;
+    cloudinary.uploader.upload(req.file.path) 
+    upload(req, res, function(error, result) {
         if(error) {
             if(error instanceof multer.MulterError) {
                 if(error.code === 'LIMIT_FILE_SIZE') {
@@ -48,7 +50,7 @@ exports.subirImagen = (req, res, next) => {
             } else if(error.hasOwnProperty('message')) {
                 req.flash('error', error.message);
             }
-            res.redirect('back');
+            fs.unlinkSync(req.file.path);
             return;
         } else {
             next();
