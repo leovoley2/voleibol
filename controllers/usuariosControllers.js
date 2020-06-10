@@ -1,12 +1,18 @@
 const Usuarios = require('../models/Usuarios');
 const enviarEmail = require('../handlers/email');
-
+const cloudinary = require('cloudinary').v2;
 const multer = require('multer');
 const shortid = require('shortid');
 const fs = require('fs');
 
+cloudinary.config({
+    CLOUD_NAME: 'hmslt7ffb',
+    API_KEY: '626868985755416',
+    API_SECRET: 'AzZDYJnyVXT4h96RIv_6TyVCfAg'
+});
+
 const configuracionMulter = {
-    limits : { fileSize : 400000 },
+    limits : { fileSize : 1024 * 1024 },
     storage: fileStorage = multer.diskStorage({
         destination: (req, file, next) => {
             next(null, __dirname+'/../public/uploads/perfiles/');
@@ -235,7 +241,7 @@ exports.guardarImagenPerfil = async (req, res) => {
 
     // almacena la nueva imagen
     if(req.file){
-        usuario.imagen = req.file.filename;
+        usuario.imagen =  await cloudinary.uploader.upload(req.file.path);
     }
 
     // almacenar en la BD
