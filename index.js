@@ -30,9 +30,7 @@ const app = express();
 // Body parser, leer formularios
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended : true }));
-app.use(fileuploads({
-    useTempFiles: true;
-}))
+
 
 // Express validator (validación con bastantes funciones)
 app.use(expressValidator());
