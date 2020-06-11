@@ -83,11 +83,11 @@ exports.crearGrupo = async (req, res) => {
     grupo.usuarioId = req.user.id;
 
     if (req.file) {
-         grupo.imagen = (req.file.filename);
-        const result = await cloudinary.uploader.upload(req.file.path);
-        const nuevafoto = new grupo({
-            imagen: result.url
-        });
+        grupo.imagen = req.file.filename;
+        const result = await cloudinary.v2.uploader.upload(req.file.path);
+        const newPhoto = new Photo({ imagen: result.url});
+        await fs.unlink(req.file.path);
+    }
 
     grupo.id = uuid();
 
@@ -282,5 +282,4 @@ exports.EliminarGrupo = async (req, res, next) => {
     // redireccionar al usuario
     req.flash('exito', 'Grupo Eliminado');
     res.redirect('/administracion');
-}
 }
