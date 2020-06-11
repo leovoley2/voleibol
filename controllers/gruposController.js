@@ -283,3 +283,4 @@ exports.EliminarGrupo = async (req, res, next) => {
     req.flash('exito', 'Grupo Eliminado');
     res.redirect('/administracion');
 }
+}
