@@ -83,14 +83,16 @@ exports.crearGrupo = async (req, res) => {
     grupo.usuarioId = req.user.id;
 
     if (req.file) {
-        grupo.imagen = await cloudinary.v2.uploader.upload(req.file.path);
-        const newPhoto = new Photo({ imagen: grupo.imagen.url});
+        grupo.imagen = req.file.filename;
+    const result = await cloudinary.v2.uploader.upload(req.file.path);
+        const newPhoto = new Photo({ imagen: result.url});
     }
 
     grupo.id = uuid();
 
     try {
         // almacenar en la BD
+        await newPhoto.save();
         await Grupos.create(grupo); 
         req.flash('exito', 'Se ha creado el grupo correctamente');
         res.redirect('/administracion');
