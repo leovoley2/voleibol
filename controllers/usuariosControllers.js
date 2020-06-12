@@ -242,7 +242,6 @@ exports.guardarImagenPerfil = async (req, res) => {
     // almacena la nueva imagen
     if(req.file){
         usuario.imagen = req.file.filename;
-        usuario.imagen =  await cloudinary.uploader.upload(req.file.path);
     }
 
     // almacenar en la BD
