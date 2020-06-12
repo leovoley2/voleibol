@@ -83,7 +83,8 @@ exports.crearGrupo = async (req, res) => {
     grupo.usuarioId = req.user.id;
 
     if (req.file) {
-        grupo.imagen = await cloudinary.v2.uploader.upload(req.file.path, {where :{'grupo' : req.file,filename}});
+    const grupo.imagen = req.file.filename;
+    const grupo.imagen = await cloudinary.v2.uploader.upload(req.file.path);
         
     }
 
