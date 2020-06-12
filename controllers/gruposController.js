@@ -18,7 +18,7 @@ const configuracionMulter =  {
     },
     storage: fileStorage = multer.diskStorage({
         destination: (req, file, next) => {
-            next(null, __dirname+'/../public/uploads/perfiles/');
+            next(null, __dirname+'/../public/uploads/grupos/');
         },
         filename : (req, file, next) => {
             const extension = file.mimetype.split('/')[1];
@@ -83,8 +83,7 @@ exports.crearGrupo = async (req, res) => {
     grupo.usuarioId = req.user.id;
 
     if (req.file) {
-    const grupo.imagen = req.file.filename;
-    const imagen = await cloudinary.v2.uploader.upload(req.file.path);
+        grupo.imagen = await cloudinary.v2.uploader.upload(req.file.path);
         
     }
 
