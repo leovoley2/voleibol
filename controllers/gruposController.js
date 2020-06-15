@@ -1,16 +1,16 @@
 const Categorias = require('../models/categorias');
 const Grupos = require('../models/Grupos');
-const cloudinary = require('cloudinary').v2;
+//const cloudinary = require('cloudinary').v2;
 const multer = require('multer');
 const shortid = require('shortid');
 const fs = require('fs');
 const uuid = require('uuid/v4');
 
-cloudinary.config({
+/*cloudinary.config({
     CLOUD_NAME: 'hmslt7ffb',
     API_KEY: '626868985755416',
     API_SECRET: 'AzZDYJnyVXT4h96RIv_6TyVCfAg'
-});
+});*/
 
 const configuracionMulter =  {
     limits: {
